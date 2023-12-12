@@ -32,9 +32,9 @@ app.get("/exit/fail", (req: Request, res: Response) => {
     process.exit(1);
 });
 
-app.get("/stress/cpu", (req: Request, res: Response) => {
+app.put("/stress/cpu", (req: Request, res: Response) => {
     exec("stress -c 1k -t 30s");
-    res.send("ok");
+    res.send("Aplicação em estresse de CPU.");
 });
 
 app.get("/health", (req: Request, res: Response) => {
@@ -45,11 +45,10 @@ app.get("/health", (req: Request, res: Response) => {
     }
 });
 
-app.get("/stress/memory", (req: Request, res: Response) => {
-    exec("stress --vm 4 --vm-bytes 1024M");
-    res.send("ok");
+app.put("/stress/memory", (req: Request, res: Response) => {
+    exec("stress --vm 2 --vm-bytes 1024M -t 30s");
+    res.send("Aplicação em estresse de memória.");
 });
-
 
 app.get('/ready', (req: Request, res: Response) => {
    
@@ -65,7 +64,7 @@ app.get('/ready', (req: Request, res: Response) => {
 app.put('/unhealth', (req: Request, res: Response) => {
 
     saudavel = false;
-    res.send("OK");
+    res.send("A aplicação agora está fora.");
 });
 
 app.get("/health", (req: Request, res: Response) => {
@@ -78,7 +77,7 @@ app.put('/unreadfor/:seconds', (req: Request, res: Response) => {
     
     const dado = new Date(new Date(Date.now()).getTime() + (1000 * +req.params.seconds));
     readTime = dado;    
-    res.send("OK");
+    res.send("A aplicação indisponível por 60 segundos.");
 });
 
 app.get("/", (req: Request, res: Response) => {

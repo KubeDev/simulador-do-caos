@@ -1,15 +1,28 @@
-import express, { Request, Response, application } from "express";
+import express, { Request, Response, application, NextFunction } from "express";
 import { exec } from "child_process";
+
 const app = express();
 const PORT = parseInt(`${process.env.PORT || 3000}`);
+
+let saudavel = true
+let readTime = new Date(Date.now());
+let isRead = () => { 
+    return readTime < new Date(Date.now());
+};
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+    
+    if (saudavel) {
+        next();
+    } else {
+        res.statusCode = 500;
+        return res.send('');
+    }   
+});
 
 app.use(express.json());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-
-app.get("/", (req: Request, res: Response) => {
-    res.render("index");
-});
 
 app.get("/exit/success", (req: Request, res: Response) => {
     process.exit(0);
@@ -21,11 +34,54 @@ app.get("/exit/fail", (req: Request, res: Response) => {
 
 app.get("/stress/cpu", (req: Request, res: Response) => {
     exec("stress -c 1k -t 30s");
-    res.send("ok")
+    res.send("ok");
+});
+
+app.get("/health", (req: Request, res: Response) => {
+    if (saudavel) {
+        res.send("ok");
+    } else {
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 app.get("/stress/memory", (req: Request, res: Response) => {
-    res.send("ok")
+    exec("stress --vm 4 --vm-bytes 1024M");
+    res.send("ok");
 });
 
+
+app.get('/ready', (req: Request, res: Response) => {
+   
+    if (isRead()) {
+        res.statusCode = 200;
+        return res.send('Ok');
+    } else {
+        res.statusCode = 500;
+        return res.send('');
+    }   
+});
+
+app.put('/unhealth', (req: Request, res: Response) => {
+
+    saudavel = false;
+    res.send("OK");
+});
+
+app.get("/health", (req: Request, res: Response) => {
+
+    res.send("ok");
+
+});
+
+app.put('/unreadfor/:seconds', (req: Request, res: Response) => {
+    
+    const dado = new Date(new Date(Date.now()).getTime() + (1000 * +req.params.seconds));
+    readTime = dado;    
+    res.send("OK");
+});
+
+app.get("/", (req: Request, res: Response) => {
+    res.render("index");
+});
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

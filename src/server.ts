@@ -48,7 +48,7 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 app.put("/stress/memory", (req: Request, res: Response) => {
-    exec("stress --vm 2 --vm-bytes 1024M -t 30s");
+    exec("stress --vm 1 --vm-bytes 1024M -t 30s");
     res.send("Aplicação em estresse de memória.");
 });
 

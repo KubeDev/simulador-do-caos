@@ -111,7 +111,12 @@
             tópicos de resiliência e consumo de recursos.</p>
           <p>
             <button type="button" class="btn btn-primary" id="breakAppButton">Quebrar a Aplicação</button>
-            <button type="button" class="btn btn-primary" id="unReadyAppButton">Aplicação Indisponível por 60 segundos</button>
+            <button type="button" class="btn btn-primary" id="unReadyAppButton">Aplicação Indisponível por 60
+              segundos</button>
+            <button type="button" class="btn btn-primary" id="stressExitOk">Encerrar Aplicação com Sucesso</button>
+            <button type="button" class="btn btn-primary" id="stressExitErro">Encerrar Aplicação com Erro</button>
+          </p>
+          <p>
             <button type="button" class="btn btn-primary" id="stressCPUAppButton">Alto Consumo de CPU</button>
             <button type="button" class="btn btn-primary" id="stressMemoryAppButton">Alto Consumo de Memória</button>
           </p>
@@ -196,6 +201,35 @@
           }
         });
       });
+
+      $('#stressExitOk').click(function (event) {
+        event.preventDefault();
+        $.ajax({
+          url: '/exit/success',
+          type: 'PUT',
+          success: function (data) {
+            appendAlert(data, 'success')
+          },
+          error: function (error) {
+            appendAlert('Erro ao executar o endpoint:', 'danger')
+          }
+        });
+      });
+
+      $('#stressExitErro').click(function (event) {
+        event.preventDefault();
+        $.ajax({
+          url: '/exit/fail',
+          type: 'PUT',
+          success: function (data) {
+            appendAlert(data, 'success')
+          },
+          error: function (error) {
+            appendAlert('Erro ao executar o endpoint:', 'danger')
+          }
+        });
+      });
+
     });
   </script>
 </body>

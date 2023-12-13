@@ -24,11 +24,13 @@ app.use(express.json());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-app.get("/exit/success", (req: Request, res: Response) => {
+app.put("/exit/success", (req: Request, res: Response) => {
+    res.send("Aplicação encerrada com sucesso.");
     process.exit(0);
 });
 
-app.get("/exit/fail", (req: Request, res: Response) => {
+app.put("/exit/fail", (req: Request, res: Response) => {
+    res.send("Aplicação encerrada com sucesso.");
     process.exit(1);
 });
 

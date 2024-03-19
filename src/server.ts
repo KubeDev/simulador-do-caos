@@ -1,8 +1,10 @@
 import express, { Request, Response, application, NextFunction } from "express";
 import { exec } from "child_process";
+import { setTimeout } from "timers/promises";
 
 const app = express();
 const PORT = parseInt(`${process.env.PORT || 3000}`);
+const SIGTERM_SECONDS = parseInt(`${process.env.SIGTERM_SECONDS || 20000}`);
 
 let saudavel = true
 let readTime = new Date(Date.now());
@@ -82,7 +84,15 @@ app.put('/unreadfor/:seconds', (req: Request, res: Response) => {
     res.send("A aplicação indisponível por 60 segundos.");
 });
 
+process.on('SIGTERM', () => {
+
+    setTimeout(SIGTERM_SECONDS);
+    console.log('Encerrando processo');
+    process.exit(0);
+});
+
 app.get("/", (req: Request, res: Response) => {
     res.render("index");
 });
+
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

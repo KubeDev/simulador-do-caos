@@ -4,7 +4,7 @@ import { setTimeout } from "timers/promises";
 
 const app = express();
 const PORT = parseInt(`${process.env.PORT || 3000}`);
-const SIGTERM_SECONDS = parseInt(`${process.env.SIGTERM_SECONDS || 20000}`);
+const SIGTERM_SECONDS = parseInt(`${process.env.SIGTERM_SECONDS || 20}`) * 1000;
 
 let saudavel = true
 let readTime = new Date(Date.now());

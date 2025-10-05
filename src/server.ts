@@ -37,8 +37,9 @@ app.put("/exit/fail", (req: Request, res: Response) => {
 });
 
 app.put("/stress/cpu", (req: Request, res: Response) => {
-    exec("stress -c 1k -t 30s");
-    res.send("Aplicação em estresse de CPU.");
+    const duration = req.query.duration || "30";
+    exec(`stress -c 1k -t ${duration}s`);
+    res.send(`Aplicação em estresse de CPU por ${duration} segundos.`);
 });
 
 app.get("/health", (req: Request, res: Response) => {
@@ -50,8 +51,9 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 app.put("/stress/memory", (req: Request, res: Response) => {
-    exec("stress --vm 1 --vm-bytes 1024M -t 30s");
-    res.send("Aplicação em estresse de memória.");
+    const duration = req.query.duration || "30";
+    exec(`stress --vm 1 --vm-bytes 1024M -t ${duration}s`);
+    res.send(`Aplicação em estresse de memória por ${duration} segundos.`);
 });
 
 app.get('/ready', (req: Request, res: Response) => {

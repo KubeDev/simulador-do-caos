@@ -4,19 +4,6 @@
 @baseUrl = http://138.197.227.226
 @time = 60
 
-### Página Inicial
-GET {{baseUrl}}/
-
-###############################################
-# HEALTH CHECKS
-###############################################
-
-### Health Check - Verifica se a aplicação está saudável
-GET {{baseUrl}}/health
-
-### Readiness Check - Verifica se a aplicação está pronta
-GET {{baseUrl}}/ready
-
 ###############################################
 # SIMULAÇÃO DE ESTRESSE
 ###############################################
@@ -26,29 +13,3 @@ PUT {{baseUrl}}/stress/cpu?duration={{time}}
 
 ### Estresse de Memória - Simula alto consumo de memória (1024M por 30s)
 PUT {{baseUrl}}/stress/memory?duration={{time}}
-
-###############################################
-# CONTROLE DE ESTADO
-###############################################
-
-### Marcar como Não Saudável - Define a aplicação como unhealthy
-PUT {{baseUrl}}/unhealth
-
-### Marcar como Não Pronta por 60 segundos
-PUT {{baseUrl}}/unreadfor/60
-
-### Marcar como Não Pronta por 30 segundos
-PUT {{baseUrl}}/unreadfor/30
-
-### Marcar como Não Pronta por 10 segundos
-PUT {{baseUrl}}/unreadfor/10
-
-###############################################
-# CONTROLE DE PROCESSO
-###############################################
-
-### Encerrar com Sucesso - Encerra a aplicação com código 0
-PUT {{baseUrl}}/exit/success
-
-### Encerrar com Falha - Encerra a aplicação com código 1
-PUT {{baseUrl}}/exit/fail
